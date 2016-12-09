@@ -1,5 +1,6 @@
 import { EventEmitter } from 'events';
 import { Machine } from 'fseh';
+export { Handlers, State, StateList, StateTable } from 'fseh';
 
 export class MachineX extends Machine implements EventEmitter {
 
