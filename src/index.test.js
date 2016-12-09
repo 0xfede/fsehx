@@ -26,14 +26,14 @@ describe('fsehx', function() {
       m.on('start', named);
 
       should.not.exist(m.state);
-      m.enter('start');
+      m.enter('start', 'aaa');
       should.exist(m.state);
       m.state.should.be.a('string');
       m.state.should.equal('start');
       named_pre_entry.should.have.been.called.once();
-      pre_entry.should.have.been.called.once.with('start');
+      pre_entry.should.have.been.called.once.with('start', 'aaa');
       named_entry.should.have.been.called.once();
-      entry.should.have.been.called.once.with('start');
+      entry.should.have.been.called.once.with('start', 'aaa');
       named.should.have.been.called.once();
     });
 
@@ -49,9 +49,9 @@ describe('fsehx', function() {
       m.on('start:exit', named_exit);
       m.on('exit', exit);
 
-      m.enter('end');
+      m.enter('end', 'aaa');
       named_exit.should.have.been.called.once();
-      exit.should.have.been.called.once.with('start');
+      exit.should.have.been.called.once.with('start', 'aaa');
     });
 
   });
