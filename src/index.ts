@@ -1,21 +1,25 @@
 import { EventEmitter } from 'events';
 import { Machine } from 'fseh';
-export { Handlers, State, StateList, StateTable } from 'fseh';
+export { Handlers, StateTable } from 'fseh';
 
 export class MachineX extends Machine implements EventEmitter {
 
   // Machine overrides
-  enter(state: string, ...args:any[]): void {
-    if (this.state) {
-      this.emit(`${this.state}:exit`, state, ...args);
-      this.emit('exit', this.state, state, ...args);
-    }
-    this.emit(`${state}:pre-entry`, ...args);
-    this.emit('pre-entry', state, ...args);
-    super.enter(state, ...args);
-    this.emit(`${state}:entry`, ...args);
-    this.emit('entry', state, ...args);
-    this.emit(state, ...args);
+  enter(state: string, ...args:any[]):Promise<any> {
+    return this.ready.then(() => {
+      if (this.state) {
+        this.emit(`${this.state}:exit`, state, ...args);
+        this.emit('exit', this.state, state, ...args);
+      }
+      this.emit(`${state}:pre-entry`, ...args);
+      this.emit('pre-entry', state, ...args);
+      return super.enter(state, ...args).then(data => {
+        this.emit(`${state}:entry`, ...args);
+        this.emit('entry', state, ...args);
+        this.emit(state, ...args);
+        return data;
+      });
+    });
   }
 
   // EventEmitter interface

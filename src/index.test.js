@@ -26,18 +26,19 @@ describe('fsehx', function() {
       m.on('start', named);
 
       should.not.exist(m.state);
-      m.enter('start', 'aaa');
-      should.exist(m.state);
-      m.state.should.be.a('string');
-      m.state.should.equal('start');
-      named_pre_entry.should.have.been.called.once();
-      pre_entry.should.have.been.called.once.with('start', 'aaa');
-      named_entry.should.have.been.called.once();
-      entry.should.have.been.called.once.with('start', 'aaa');
-      named.should.have.been.called.once();
+      return m.enter('start', 'aaa').then(function() {
+        should.exist(m.state);
+        m.state.should.be.a('string');
+        m.state.should.equal('start');
+        named_pre_entry.should.have.been.called.once();
+        pre_entry.should.have.been.called.once.with('start', 'aaa');
+        named_entry.should.have.been.called.once();
+        entry.should.have.been.called.once.with('start', 'aaa');
+        named.should.have.been.called.once();
+      });
     });
 
-    it('should emit events when entering a state', function() {
+    it('should emit events when exiting a state', function() {
       var m = new MachineX({
         start: {},
         end: {}
@@ -49,9 +50,12 @@ describe('fsehx', function() {
       m.on('start:exit', named_exit);
       m.on('exit', exit);
 
-      m.enter('end', 'aaa');
-      named_exit.should.have.been.called.once();
-      exit.should.have.been.called.once.with('start', 'aaa');
+      m.ready.then(function() {
+        return m.enter('end', 'aaa').then(function() {
+          named_exit.should.have.been.called.once();
+          exit.should.have.been.called.once.with('start', 'aaa');
+        });
+      });
     });
 
   });
