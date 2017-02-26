@@ -6,19 +6,17 @@ export class MachineX extends Machine implements EventEmitter {
 
   // Machine overrides
   enter(state: string, ...args:any[]):Promise<any> {
-    return this.ready.then(() => {
-      if (this.state) {
-        this.emit(`${this.state}:exit`, state, ...args);
-        this.emit('exit', this.state, state, ...args);
-      }
-      this.emit(`${state}:pre-entry`, ...args);
-      this.emit('pre-entry', state, ...args);
-      return super.enter(state, ...args).then(data => {
-        this.emit(`${state}:entry`, ...args);
-        this.emit('entry', state, ...args);
-        this.emit(state, ...args);
-        return data;
-      });
+    if (this.state) {
+      this.emit(`${this.state}:exit`, state, ...args);
+      this.emit('exit', this.state, state, ...args);
+    }
+    this.emit(`${state}:pre-entry`, ...args);
+    this.emit('pre-entry', state, ...args);
+    return super.enter(state, ...args).then(data => {
+      this.emit(`${state}:entry`, ...args);
+      this.emit('entry', state, ...args);
+      this.emit(state, ...args);
+      return data;
     });
   }
 
