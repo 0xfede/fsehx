@@ -1,9 +1,10 @@
 var chai = require('chai')
-  , spies = require('chai-spies')
+  , sinon = require('sinon')
+  , sinonChai = require('sinon-chai')
   , should = chai.should()
   , MachineX = require('../dist/index').MachineX
 
-chai.use(spies);
+chai.use(sinonChai);
 
 describe('fsehx', function() {
 
@@ -13,11 +14,11 @@ describe('fsehx', function() {
         start: {}
       });
 
-      var named_pre_entry = chai.spy();
-      var pre_entry = chai.spy();
-      var named_entry = chai.spy();
-      var entry = chai.spy();
-      var named = chai.spy();
+      var named_pre_entry = sinon.spy();
+      var pre_entry = sinon.spy();
+      var named_entry = sinon.spy();
+      var entry = sinon.spy();
+      var named = sinon.spy();
 
       m.on('start:pre-entry', named_pre_entry);
       m.on('pre-entry', pre_entry);
@@ -30,11 +31,13 @@ describe('fsehx', function() {
         should.exist(m.state);
         m.state.should.be.a('string');
         m.state.should.equal('start');
-        named_pre_entry.should.have.been.called.once();
-        pre_entry.should.have.been.called.once.with('start', 'aaa');
-        named_entry.should.have.been.called.once();
-        entry.should.have.been.called.once.with('start', 'aaa');
-        named.should.have.been.called.once();
+        named_pre_entry.should.have.been.calledOnce;
+        pre_entry.should.have.been.calledOnce;
+        pre_entry.should.have.been.calledWith('start', 'aaa');
+        named_entry.should.have.been.calledOnce;
+        entry.should.have.been.calledOnce;
+        entry.should.have.been.calledWith('start', 'aaa');
+        named.should.have.been.calledOnce;
       });
     });
 
@@ -44,16 +47,17 @@ describe('fsehx', function() {
         end: {}
       }, 'start');
 
-      var named_exit = chai.spy();
-      var exit = chai.spy();
+      var named_exit = sinon.spy();
+      var exit = sinon.spy();
 
       m.on('start:exit', named_exit);
       m.on('exit', exit);
 
       m.ready.then(function() {
         return m.enter('end', 'aaa').then(function() {
-          named_exit.should.have.been.called.once();
-          exit.should.have.been.called.once.with('start', 'aaa');
+          named_exit.should.have.been.calledOnce;
+          exit.should.have.been.calledOnce;
+          exit.should.have.been.calledWith('start');
         });
       });
     });
