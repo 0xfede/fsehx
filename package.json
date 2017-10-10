@@ -43,16 +43,16 @@
   },
   "homepage": "https://github.com/0xfede/fsehx#readme",
   "devDependencies": {
-    "@types/node": "8.0.31",
+    "@types/node": "8.0.33",
     "chai": "4.1.2",
     "commitizen": "2.9.6",
     "coveralls": "^3.0.0",
     "cz-conventional-changelog": "2.0.0",
     "husky": "^0.14.3",
-    "mocha": "3.5.3",
+    "mocha": "4.0.1",
     "nyc": "11.2.1",
     "semantic-release": "8.0.3",
-    "sinon": "^4.0.0",
+    "sinon": "^4.0.1",
     "sinon-chai": "^2.14.0",
     "typescript": "2.5.3"
   },
@@ -62,6 +62,6 @@
     }
   },
   "dependencies": {
-    "fseh": "^2.5.0"
+    "fseh": "^2.6.0"
   }
 }
